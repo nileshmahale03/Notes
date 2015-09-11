@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface AddNoteTableViewController : UITableViewController
 
+@property (strong, nonatomic) IBOutlet UITextField *titleField;
+
+@property (strong, nonatomic) IBOutlet UITextView *textView;
+
+@property (strong, nonatomic) NSManagedObject *note;
+
+- (IBAction)save:(id)sender;
+
 @end
+

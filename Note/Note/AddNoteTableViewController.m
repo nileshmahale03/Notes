@@ -7,25 +7,25 @@
 //
 
 #import "AddNoteTableViewController.h"
+#import <CoreData/CoreData.h>
+#import "MasterTableViewController.h"
 
 @interface AddNoteTableViewController ()
-
-@property (strong, nonatomic) IBOutlet UITextField *titleField;
-
-@property (strong, nonatomic) IBOutlet UITextView *textView;
 
 @end
 
 @implementation AddNoteTableViewController
 
+@synthesize note;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if (self.note) {
+        NSLog(@"HI");
+        [self.titleField setText:[self.note valueForKey:@"title"]];
+        [self.textView setText:[self.note valueForKey:@"text"]];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +33,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+    return context;
+}
 
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -88,4 +96,46 @@
 }
 */
 
+
+- (IBAction)save:(id)sender {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    if (self.note) {
+        // Update existing device
+        [self.note setValue:self.titleField.text forKey:@"title"];
+        [self.note setValue:self.textView.text forKey:@"text"];
+    } else {
+        // Create a new device
+        NSManagedObject *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
+        [newNote setValue:self.titleField.text forKey:@"title"];
+        [newNote setValue:self.textView.text forKey:@"text"];
+    }
+    
+    NSError *error = nil;
+    // Save the object to persistent store
+    if (![context save:&error]) {
+        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
