@@ -42,6 +42,29 @@
     return context;
 }
 
+-(void)viewWillDisappear:(BOOL)animated {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    
+    if (self.note) {
+        // Update existing device
+        [self.note setValue:self.titleField.text forKey:@"title"];
+        [self.note setValue:self.textView.text forKey:@"text"];
+    } else {
+        // Create a new device
+        NSManagedObject *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
+        [newNote setValue:self.titleField.text forKey:@"title"];
+        [newNote setValue:self.textView.text forKey:@"text"];
+    }
+    
+    NSError *error = nil;
+    // Save the object to persistent store
+    if (![context save:&error]) {
+        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 /*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
@@ -96,29 +119,6 @@
 }
 */
 
-
-- (IBAction)save:(id)sender {
-    NSManagedObjectContext *context = [self managedObjectContext];
-    
-    if (self.note) {
-        // Update existing device
-        [self.note setValue:self.titleField.text forKey:@"title"];
-        [self.note setValue:self.textView.text forKey:@"text"];
-    } else {
-        // Create a new device
-        NSManagedObject *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
-        [newNote setValue:self.titleField.text forKey:@"title"];
-        [newNote setValue:self.textView.text forKey:@"text"];
-    }
-    
-    NSError *error = nil;
-    // Save the object to persistent store
-    if (![context save:&error]) {
-        NSLog(@"Can't Save! %@ %@", error, [error localizedDescription]);
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 @end
 

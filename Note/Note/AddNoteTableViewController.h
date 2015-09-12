@@ -17,7 +17,5 @@
 
 @property (strong, nonatomic) NSManagedObject *note;
 
-- (IBAction)save:(id)sender;
-
 @end
 

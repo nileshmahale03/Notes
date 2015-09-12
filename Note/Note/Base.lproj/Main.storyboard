@@ -114,13 +114,7 @@
                             <outlet property="delegate" destination="uER-kr-ILL" id="WNi-qZ-AaT"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Note" id="xzR-yb-TbF">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="RM9-mW-oMI">
-                            <connections>
-                                <action selector="save:" destination="uER-kr-ILL" id="pND-hC-jep"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Note" id="xzR-yb-TbF"/>
                     <connections>
                         <outlet property="textView" destination="mbS-qm-TAB" id="qn0-Xu-XNG"/>
                         <outlet property="titleField" destination="JVx-00-oEr" id="dL1-pQ-Y56"/>
