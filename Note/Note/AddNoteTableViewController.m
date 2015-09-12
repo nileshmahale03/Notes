@@ -42,6 +42,8 @@
     return context;
 }
 
+#pragma mark - save content once navigate back to main screen (so no need of Save Button)
+
 -(void)viewWillDisappear:(BOOL)animated {
     NSManagedObjectContext *context = [self managedObjectContext];
     

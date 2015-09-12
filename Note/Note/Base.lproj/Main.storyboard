@@ -44,11 +44,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="List" id="eHM-vs-g6F">
-                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="tWd-bx-N0P">
-                            <connections>
-                                <action selector="editAction:" destination="isG-ZR-feq" id="wfB-rd-ZcH"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="iuN-3E-v2J">
                             <connections>
                                 <segue destination="uER-kr-ILL" kind="show" identifier="addNote" id="axT-Pq-l65"/>

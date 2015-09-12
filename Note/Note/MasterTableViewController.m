@@ -24,8 +24,7 @@
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,7 +32,16 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - save content once navigated back to main screen
+#pragma mark - Core Data stack
+
+- (NSManagedObjectContext *)managedObjectContext {
+    NSManagedObjectContext *context = nil;
+    id delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate performSelector:@selector(managedObjectContext)]) {
+        context = [delegate managedObjectContext];
+    }
+    return context;
+}
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -44,16 +52,6 @@
     self.notes = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
     
     [self.tableView reloadData];
-}
-
-
-- (NSManagedObjectContext *)managedObjectContext {
-    NSManagedObjectContext *context = nil;
-    id delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate performSelector:@selector(managedObjectContext)]) {
-        context = [delegate managedObjectContext];
-    }
-    return context;
 }
 
 
@@ -85,8 +83,32 @@
 
 #pragma mark - Edit Button
 
+-(void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    
+    [super setEditing:editing animated:animated];
+    
+    if(editing) {
+        //Do something for edit mode
+        NSLog(@"Editing Mode");
+    }
+    
+    else {
+        //Do something for non-edit mode
+        NSLog(@"Non-Editing Mode");
+    }
+    
+}
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    NSString *stringToMove = [self.notes objectAtIndex:fromIndexPath.row];
+    [self.notes removeObjectAtIndex:fromIndexPath.row];
+    [self.notes insertObject:stringToMove atIndex:toIndexPath.row];
+}
+
+#pragma mark - swipe to Delete Button
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     // Return NO if you do not want the specified item to be editable.
     return YES;
 }
@@ -96,35 +118,11 @@
     return UITableViewCellEditingStyleDelete;
 }
 
+
 - (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == [self.notes count]) {
-        return NO;
-    }
     return YES;
 }
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-    NSString *stringToMove = [self.notes objectAtIndex:fromIndexPath.row];
-    [self.notes removeObjectAtIndex:fromIndexPath.row];
-    [self.notes insertObject:stringToMove atIndex:toIndexPath.row];
-}
-
-- (IBAction)editAction:(id)sender {
-    NSLog(@"Editing");
-    
-    [super setEditing:TRUE];
-    [self.tableView setEditing:TRUE];
-    self.editing = YES;
-}
-
-
-#pragma mark - swipe to Delete Button
-
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     NSManagedObjectContext *context = [self managedObjectContext];

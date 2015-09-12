@@ -10,6 +10,5 @@
 
 @interface MasterTableViewController : UITableViewController
 
-- (IBAction)editAction:(id)sender;
 
 @end
