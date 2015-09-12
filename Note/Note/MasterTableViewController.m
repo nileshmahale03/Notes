@@ -13,12 +13,12 @@
 
 @interface MasterTableViewController ()
 
-
 @property (strong, nonatomic) NSMutableArray *notes;
 
 @end
 
 @implementation MasterTableViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -85,6 +85,7 @@
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"text"]]];
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     return cell;
 }
 
@@ -188,6 +189,27 @@
 //        cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
 //    }
 //}
+
+
+
+- (IBAction)longPressFired:(UILongPressGestureRecognizer *)sender {
+  
+    NSLog(@"Long Pressed!");
+    
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        NSMutableArray *itemsToShare = [NSMutableArray array];
+        
+        //replace sample text's with Notes' title
+        [itemsToShare addObject:@"This is sample title"];
+        
+        [itemsToShare addObject:@"This is sample text"];
+        
+        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+        
+        [self presentViewController:activityVC animated:YES completion:nil];
+    }
+}
+
 
 
 @end

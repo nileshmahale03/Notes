@@ -13,6 +13,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="68" id="YoC-r6-ER4" customClass="MasterTableViewCell">
                                 <autoresizingMask key="autoresizingMask"/>
@@ -45,9 +46,12 @@
                                         <constraint firstItem="0cd-Md-Cfj" firstAttribute="trailing" secondItem="eMq-Tb-mxF" secondAttribute="trailing" id="yA5-xK-2GB"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="detailTextLabel" destination="0cd-Md-Cfj" id="bZD-JF-VVD"/>
                                     <outlet property="textLabel" destination="eMq-Tb-mxF" id="mfn-hT-gl0"/>
+                                    <outletCollection property="gestureRecognizers" destination="t6d-BR-dpP" appends="YES" id="ToK-BU-9Jh"/>
+                                    <outletCollection property="gestureRecognizers" destination="t6d-BR-dpP" appends="YES" id="q6H-TE-NiE"/>
                                     <segue destination="uER-kr-ILL" kind="show" identifier="none" id="O06-yd-9f9"/>
                                 </connections>
                             </tableViewCell>
@@ -55,6 +59,7 @@
                         <connections>
                             <outlet property="dataSource" destination="isG-ZR-feq" id="JLv-U4-Qkc"/>
                             <outlet property="delegate" destination="isG-ZR-feq" id="Hxe-eG-6Zb"/>
+                            <outletCollection property="gestureRecognizers" destination="t6d-BR-dpP" appends="YES" id="vBo-AV-zvy"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="List" id="eHM-vs-g6F">
@@ -64,8 +69,16 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="longPressGestureRecognizer" destination="t6d-BR-dpP" id="PaQ-FN-ZRR"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cUl-um-ii7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="t6d-BR-dpP">
+                    <connections>
+                        <action selector="longPressFired:" destination="isG-ZR-feq" id="Hc5-fC-HwG"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="382" y="388"/>
         </scene>

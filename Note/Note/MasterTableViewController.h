@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface MasterTableViewController : UITableViewController
+
+@property (strong, nonatomic) IBOutlet UILongPressGestureRecognizer *longPressGestureRecognizer;
+
+- (IBAction)longPressFired:(UILongPressGestureRecognizer *)sender;
 
 
 @end
+
