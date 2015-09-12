@@ -9,8 +9,10 @@
 #import "MasterTableViewController.h"
 #import <CoreData/CoreData.h>
 #import "AddNoteTableViewController.h"
+#import "MasterTableViewCell.h"
 
 @interface MasterTableViewController ()
+
 
 @property (strong, nonatomic) NSMutableArray *notes;
 
@@ -26,7 +28,11 @@
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
+    self.tableView.estimatedRowHeight = 68.0;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -77,7 +83,8 @@
     NSManagedObject *note = [self.notes objectAtIndex:indexPath.row];
     [cell.textLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"title"]]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"text"]]];
-    
+    //cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
@@ -101,9 +108,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    
     NSString *stringToMove = [self.notes objectAtIndex:fromIndexPath.row];
     [self.notes removeObjectAtIndex:fromIndexPath.row];
     [self.notes insertObject:stringToMove atIndex:toIndexPath.row];
+
 }
 
 #pragma mark - swipe to Delete Button

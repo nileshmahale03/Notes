@@ -10,6 +10,10 @@
 
 @implementation MasterTableViewCell
 
+@synthesize textLabel;
+
+@synthesize detailTextLabel;
+
 - (void)awakeFromNib {
     // Initialization code
 }

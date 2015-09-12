@@ -10,4 +10,9 @@
 
 @interface MasterTableViewCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *textLabel;
+
+@property (strong, nonatomic) IBOutlet UILabel *detailTextLabel;
+
+
 @end

@@ -29,6 +29,7 @@
     }
 }
 
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -49,11 +50,11 @@
     NSManagedObjectContext *context = [self managedObjectContext];
     
     if (self.note) {
-        // Update existing device
+        // Update existing Notes
         [self.note setValue:self.titleField.text forKey:@"title"];
         [self.note setValue:self.textView.text forKey:@"text"];
     } else {
-        // Create a new device
+        // Create a new Notes
         NSManagedObject *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
         [newNote setValue:self.titleField.text forKey:@"title"];
         [newNote setValue:self.textView.text forKey:@"text"];
