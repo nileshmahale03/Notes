@@ -11,33 +11,56 @@
 #import "AddNoteTableViewController.h"
 #import "MasterTableViewCell.h"
 
-@interface MasterTableViewController ()
+
+@interface MasterTableViewController () <UISearchBarDelegate, UISearchResultsUpdating>
 
 @property (strong, nonatomic) NSMutableArray *notes;
+
+@property (strong, nonatomic) NSFetchRequest *searchFetchRequest; //search bar
+
+@property (strong, nonatomic) UISearchController *searchController; //search bar
+
+@property (strong, nonatomic) NSArray *filteredList; //search bar
+
+//search bar
+typedef NS_ENUM(NSInteger, NotesSearchScope)
+{
+    searchScopeTitle = 0,
+    searchScopeText = 1
+};
 
 @end
 
 @implementation MasterTableViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     self.tableView.estimatedRowHeight = 68.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-
+    
+    
+    // no serach result
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    
+    // configure the search bar
+    self.searchController.searchBar.scopeButtonTitles = @[NSLocalizedString(@"Scope Title",@"Title"),
+                                                          NSLocalizedString(@"Scope Text",@"Text")];
+    [self.searchController.searchBar setTintColor:[UIColor whiteColor]];
+    [self.searchController.searchBar setBarTintColor:[UIColor colorWithRed:231.0/255.0 green:95.0/255.0 blue:53.0/255.0 alpha:0.3]];
+    [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+    self.searchController.searchBar.delegate = self;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    self.definesPresentationContext = YES;
+    
+    // soemthing new
+    [self.searchController.searchBar sizeToFit];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Core Data stack
 
@@ -66,21 +89,39 @@
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
+    
+    if (self.searchController.active) {
+        return 1;
+    } else {
+        return 1;
+    }
+
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return self.notes.count;
+
+    if (self.searchController.active) {
+        return [self.filteredList count];
+    } else {
+        return self.notes.count;
+    }
+
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
     // Configure the cell...
-    NSManagedObject *note = [self.notes objectAtIndex:indexPath.row];
+    NSManagedObject *note = nil;
+    
+    if (self.searchController.active) {
+        note = [self.filteredList objectAtIndex:indexPath.row];
+    } else {
+        note = [self.notes objectAtIndex:indexPath.row];
+    }
+    
     [cell.textLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"title"]]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"text"]]];
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -118,24 +159,24 @@
 
 #pragma mark - swipe to Delete Button
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+
     return YES;
 }
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     return UITableViewCellEditingStyleDelete;
 }
 
 
-- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     NSManagedObjectContext *context = [self managedObjectContext];
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -190,7 +231,7 @@
 //    }
 //}
 
-
+#pragma mark - share sheet
 
 - (IBAction)longPressFired:(UILongPressGestureRecognizer *)sender {
   
@@ -210,6 +251,63 @@
     }
 }
 
+#pragma mark - search bar
+
+- (NSFetchRequest *)searchFetchRequest {
+    
+    if (_searchFetchRequest != nil) {
+        
+        return _searchFetchRequest;
+    }
+    
+    _searchFetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Note" inManagedObjectContext:self.managedObjectContext];
+    [_searchFetchRequest setEntity:entity];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObjects:sortDescriptor, nil];
+    [_searchFetchRequest setSortDescriptors:sortDescriptors];
+    
+    return _searchFetchRequest;
+}
+
+- (void)searchForText:(NSString *)searchText scope:(NotesSearchScope)scopeOption {
+    
+    if (self.managedObjectContext) {
+        
+        NSString *predicateFormat = @"%K CONTAINS[cd] %@";
+        NSString *searchAttribute = @"title";
+        
+        if (scopeOption == searchScopeText) {
+            
+            searchAttribute = @"text";
+        }
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:predicateFormat, searchAttribute, searchText];
+        [self.searchFetchRequest setPredicate:predicate];
+        
+        NSError *error = nil;
+        self.filteredList = [self.managedObjectContext executeFetchRequest:self.searchFetchRequest error:&error];
+    }
+}
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+   
+    NSString *searchString = searchController.searchBar.text;
+    [self searchForText:searchString scope:self.searchController.searchBar.selectedScopeButtonIndex];
+    [self.tableView reloadData];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
+    
+    [self updateSearchResultsForSearchController:self.searchController];
+}
+
+- (void)didReceiveMemoryWarning {
+    
+    [super didReceiveMemoryWarning];
+    self.searchFetchRequest = nil;
+}
 
 
 @end
