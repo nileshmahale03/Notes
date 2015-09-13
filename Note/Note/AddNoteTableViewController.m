@@ -27,6 +27,13 @@
         [self.titleField setText:[self.note valueForKey:@"title"]];
         [self.textView setText:[self.note valueForKey:@"text"]];
     }
+
+    // detect actionable data
+    self.textView.dataDetectorTypes = UIDataDetectorTypeLink;
+    self.textView.dataDetectorTypes = UIDataDetectorTypePhoneNumber;
+    self.textView.dataDetectorTypes = UIDataDetectorTypeAddress;
+    self.textView.dataDetectorTypes = UIDataDetectorTypeCalendarEvent;
+    self.textView.dataDetectorTypes = UIDataDetectorTypeAll;
 }
 
 
@@ -122,6 +129,21 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - cancel button
+
+- (IBAction)cancelAction:(UIBarButtonItem *)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - toggle between edit and detect mode
+
+- (IBAction)tapDetected:(UITapGestureRecognizer *)sender {
+    
+    self.textView.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.textView.editable = YES;
+ 
+}
 
 @end
 

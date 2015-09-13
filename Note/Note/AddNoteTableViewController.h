@@ -17,5 +17,11 @@
 
 @property (strong, nonatomic) NSManagedObject *note;
 
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapGestureOutlet;
+
+- (IBAction)cancelAction:(UIBarButtonItem *)sender;
+
+- (IBAction)tapDetected:(UITapGestureRecognizer *)sender;
+
 @end
 
