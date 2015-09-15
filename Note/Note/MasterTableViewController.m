@@ -11,6 +11,24 @@
 #import "AddNoteTableViewController.h"
 #import "MasterTableViewCell.h"
 
+/*
+ cell.backgroundColor = [UIColor colorWithRed:254.0/255.0 green:119.0/255.0 blue:34.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 1) {
+ cell.backgroundColor = [UIColor colorWithRed:231.0/255.0 green:62.0/255.0 blue:65.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 2) {
+ cell.backgroundColor = [UIColor colorWithRed:177.0/255.0 green:79.0/255.0 blue:199.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 3) {
+ cell.backgroundColor = [UIColor colorWithRed:41.0/255.0 green:47.0/255.0 blue:203.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 4) {
+ cell.backgroundColor = [UIColor colorWithRed:66.0/255.0 green:168.0/255.0 blue:38.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 5) {
+ cell.backgroundColor = [UIColor colorWithRed:253.0/255.0 green:69.0/255.0 blue:23.0/255.0 alpha:1.0];
+ } else if (indexPath.row == 6) {
+ cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
+ } else {
+ cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
+ 
+ */
 
 @interface MasterTableViewController () <UISearchBarDelegate, UISearchResultsUpdating>
 
@@ -64,6 +82,8 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     // soemthing new
     [self.searchController.searchBar sizeToFit];
     //self.edgesForExtendedLayout = UIRectEdgeNone;
+    
+
 }
 
 
@@ -85,6 +105,8 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
     self.notes = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
+    
+//    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[self.notes count] inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
     
     [self.tableView reloadData];
 }
@@ -131,6 +153,9 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"text"]]];
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
+    //test
+    //cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
     
     return cell;
 }
@@ -225,19 +250,13 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
 #pragma mark - alternate row color
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0) {
-        cell.backgroundColor = [UIColor colorWithRed:254.0/255.0 green:119.0/255.0 blue:34.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 1) {
-        cell.backgroundColor = [UIColor colorWithRed:231.0/255.0 green:62.0/255.0 blue:65.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 2) {
+    if (indexPath.row == 0 || indexPath.row == 4 || indexPath.row == 8) {
         cell.backgroundColor = [UIColor colorWithRed:177.0/255.0 green:79.0/255.0 blue:199.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 3) {
+    } else if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 7) {
         cell.backgroundColor = [UIColor colorWithRed:41.0/255.0 green:47.0/255.0 blue:203.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 4) {
+    } else if (indexPath.row == 2 || indexPath.row == 5 || indexPath.row == 10) {
         cell.backgroundColor = [UIColor colorWithRed:66.0/255.0 green:168.0/255.0 blue:38.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 5) {
-        cell.backgroundColor = [UIColor colorWithRed:253.0/255.0 green:69.0/255.0 blue:23.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 6) {
+    } else if (indexPath.row == 3 || indexPath.row == 6 || indexPath.row == 11) {
         cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
     } else {
         cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
@@ -252,16 +271,29 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     NSLog(@"Long Pressed!");
     
     if (sender.state == UIGestureRecognizerStateBegan) {
-        NSMutableArray *itemsToShare = [NSMutableArray array];
         
-        //replace sample text's with Notes' title
-        [itemsToShare addObject:@"This is sample title"];
+        CGPoint point = [sender locationInView:[self tableView]];
         
-        [itemsToShare addObject:@"This is sample text"];
+        NSIndexPath *indexPath = [[self tableView] indexPathForRowAtPoint:point];
         
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+        if(indexPath != nil) {
+            
+            UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
+            
+            //NSLog([NSString stringWithFormat:@"%@", cell.textLabel]);
+            
+            NSMutableArray *itemsToShare = [NSMutableArray array];
+            
+            [itemsToShare addObject:cell.textLabel.text]; //title
+            
+            [itemsToShare addObject:cell.detailTextLabel.text]; //text
+            
+            
+            UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
+            
+            [self presentViewController:activityVC animated:YES completion:nil];
+        }
         
-        [self presentViewController:activityVC animated:YES completion:nil];
     }
 }
 

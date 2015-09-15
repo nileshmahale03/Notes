@@ -90,7 +90,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="382" y="388"/>
+            <point key="canvasLocation" x="276" y="388"/>
         </scene>
         <!--Note-->
         <scene sceneID="zDo-Tp-aWt">
@@ -176,7 +176,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1126" y="388"/>
+            <point key="canvasLocation" x="968" y="388"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Nuw-ZM-pH7">
