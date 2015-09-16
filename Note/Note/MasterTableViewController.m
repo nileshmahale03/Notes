@@ -104,6 +104,7 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     // fetch the Note from persistent data store
     NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"Note"];
+    fetchRequest.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"modifiedOn" ascending:YES]];
     self.notes = [[managedObjectContext executeFetchRequest:fetchRequest error:nil] mutableCopy];
     
 //    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[self.notes count] inSection:0] animated:YES scrollPosition:UITableViewScrollPositionTop];
@@ -149,8 +150,11 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
         note = [self.notes objectAtIndex:indexPath.row];
     }
     
+    [note setValue:[NSDate date] forKey:@"modifiedOn"]; // for sort descriptor
+    
     [cell.textLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"title"]]];
     [cell.detailTextLabel setText:[NSString stringWithFormat:@"%@", [note valueForKey:@"text"]]];
+    
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
@@ -250,15 +254,14 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
 #pragma mark - alternate row color
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.row == 0 || indexPath.row == 4 || indexPath.row == 8) {
+    NSInteger i = indexPath.row % 4;
+    if (i == 0) {
         cell.backgroundColor = [UIColor colorWithRed:177.0/255.0 green:79.0/255.0 blue:199.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 7) {
+    } else if (i == 1) {
         cell.backgroundColor = [UIColor colorWithRed:41.0/255.0 green:47.0/255.0 blue:203.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 2 || indexPath.row == 5 || indexPath.row == 10) {
+    } else if (i == 2) {
         cell.backgroundColor = [UIColor colorWithRed:66.0/255.0 green:168.0/255.0 blue:38.0/255.0 alpha:1.0];
-    } else if (indexPath.row == 3 || indexPath.row == 6 || indexPath.row == 11) {
-        cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
-    } else {
+    } else if (i == 3) {
         cell.backgroundColor = [UIColor colorWithRed:33.0/255.0 green:167.0/255.0 blue:199.0/255.0 alpha:1.0];
     }
 }
