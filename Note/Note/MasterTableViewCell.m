@@ -24,5 +24,10 @@
     // Configure the view for the selected state
 }
 
+//-(void)viewWillAppear:(BOOL)animated {
+//    
+//    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.code-programming.ShareExtension"];
+//    self.textLabel.text = [sharedDefaults objectForKey:@"stringKey"];
+//}
 
 @end

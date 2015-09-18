@@ -360,7 +360,6 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
 }
 
 
-
 @end
 
 

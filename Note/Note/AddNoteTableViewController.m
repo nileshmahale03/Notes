@@ -65,6 +65,7 @@
         NSManagedObject *newNote = [NSEntityDescription insertNewObjectForEntityForName:@"Note" inManagedObjectContext:context];
         [newNote setValue:self.titleField.text forKey:@"title"];
         [newNote setValue:self.textView.text forKey:@"text"];
+        
     }
     
     NSError *error = nil;
@@ -144,6 +145,14 @@
     self.textView.editable = YES;
  
 }
+
+#pragma mark - share Extension
+
+//-(void)viewWillAppear:(BOOL)animated {
+//
+//    NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.code-programming.ShareExtension"];
+//    self.titleField.text = [sharedDefaults objectForKey:@"stringKey"];
+//}
 
 @end
 
