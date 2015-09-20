@@ -24,7 +24,7 @@
 
     NSUserDefaults *sharedDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.code-programming.ShareExtension"];
     [sharedDefaults setObject:self.contentText forKey:@"stringKey"];
-    
+    [sharedDefaults synchronize];
     // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
    
     [self.extensionContext completeRequestReturningItems:@[] completionHandler:nil];

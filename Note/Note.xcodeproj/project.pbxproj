@@ -20,6 +20,7 @@
 		279AF7231BABB0EB00EF457B /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 279AF7221BABB0EB00EF457B /* ShareViewController.m */; };
 		279AF7261BABB0EB00EF457B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 279AF7241BABB0EB00EF457B /* MainInterface.storyboard */; };
 		279AF72A1BABB0EB00EF457B /* ShareAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 279AF71F1BABB0EB00EF457B /* ShareAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		27E6AC491BAE36640051A267 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E6AC481BAE36640051A267 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		279AF7271BABB0EB00EF457B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		279AF72F1BABB17900EF457B /* ShareAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ShareAction.entitlements; sourceTree = "<group>"; };
 		279AF7301BABB1EA00EF457B /* Note.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Note.entitlements; sourceTree = "<group>"; };
+		27E6AC481BAE36640051A267 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E6AC491BAE36640051A267 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +112,7 @@
 		278E629D1BA15E0A00336371 = {
 			isa = PBXGroup;
 			children = (
+				27E6AC481BAE36640051A267 /* CloudKit.framework */,
 				278E62A81BA15E0A00336371 /* Note */,
 				278E62C51BA15E0A00336371 /* NoteTests */,
 				279AF7201BABB0EB00EF457B /* ShareAction */,
@@ -258,10 +262,14 @@
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
 						};
 					};
 					278E62C11BA15E0A00336371 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = QH652MJ3PW;
 						TestTargetID = 278E62A51BA15E0A00336371;
 					};
 					279AF71E1BABB0EB00EF457B = {
@@ -413,7 +421,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nilesh Mahale (DDPXLMS5HD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nilesh Mahale (DDPXLMS5HD)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -436,6 +445,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "7bec7cb7-ff11-4e0a-8c45-d2c8e4072ae9";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -457,7 +467,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nilesh Mahale (DDPXLMS5HD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nilesh Mahale (DDPXLMS5HD)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -472,6 +483,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "7bec7cb7-ff11-4e0a-8c45-d2c8e4072ae9";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -511,6 +523,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -523,6 +537,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.code-Programming.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Note.app/Note";
 			};
 			name = Debug;
@@ -531,6 +546,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -539,6 +556,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.code-Programming.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Note.app/Note";
 			};
 			name = Release;
@@ -613,6 +631,7 @@
 				279AF72D1BABB0EB00EF457B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -18,10 +18,15 @@
 
 @synthesize note;
 
+- (void)reloadFetchedResults:(NSNotification*)note {
+    NSLog(@"Underlying data changed ... refreshing!");
+    [self managedObjectContext];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    // core-data
     if (self.note) {
         NSLog(@"HI");
         [self.titleField setText:[self.note valueForKey:@"title"]];
@@ -34,6 +39,15 @@
     self.textView.dataDetectorTypes = UIDataDetectorTypeAddress;
     self.textView.dataDetectorTypes = UIDataDetectorTypeCalendarEvent;
     self.textView.dataDetectorTypes = UIDataDetectorTypeAll;
+    
+    // iCloud
+    // Refresh this view whenever data changes
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadFetchedResults:)
+                                                 name:@"SomethingChanged"
+                                               object:[[UIApplication sharedApplication] delegate]];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

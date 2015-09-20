@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
 
 @implementation MasterTableViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -82,7 +83,6 @@ typedef NS_ENUM(NSInteger, NotesSearchScope)
     // soemthing new
     [self.searchController.searchBar sizeToFit];
     //self.edgesForExtendedLayout = UIRectEdgeNone;
-    
 
 }
 
